@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://dbbfbrc5t7gbr"]
+
+[ext_resource type="Script" uid="uid://c5thgn617a6im" path="res://scripts/entities/box.gd" id="1_6qeuk"]
+[ext_resource type="Texture2D" uid="uid://bsouiit3pksxh" path="res://assets/images/boxes.aseprite" id="2_84kud"]
+[ext_resource type="Script" uid="uid://b6k13gc2m4e5s" path="res://addons/gecs/ecs/component.gd" id="2_phrsi"]
+[ext_resource type="Script" uid="uid://b4rbj5gkyqjhp" path="res://scripts/components/c_grid_position.gd" id="3_p1tm0"]
+[ext_resource type="Script" uid="uid://bnhw3nj3ouvbc" path="res://scripts/components/c_pushable.gd" id="4_pmhjo"]
+[ext_resource type="Script" uid="uid://cfkdxuv6q4ixf" path="res://scripts/components/c_blocking.gd" id="5_kbprn"]
+[ext_resource type="Script" uid="uid://dqrdw7fkfybhd" path="res://scripts/components/c_box_type.gd" id="6_ipqrb"]
+
+[sub_resource type="Resource" id="Resource_84kud"]
+script = ExtResource("3_p1tm0")
+metadata/_custom_type_script = "uid://b4rbj5gkyqjhp"
+
+[sub_resource type="Resource" id="Resource_xccy8"]
+script = ExtResource("4_pmhjo")
+metadata/_custom_type_script = "uid://bnhw3nj3ouvbc"
+
+[sub_resource type="Resource" id="Resource_7wlqk"]
+script = ExtResource("5_kbprn")
+metadata/_custom_type_script = "uid://cfkdxuv6q4ixf"
+
+[sub_resource type="Resource" id="Resource_0ptv4"]
+script = ExtResource("6_ipqrb")
+metadata/_custom_type_script = "uid://dqrdw7fkfybhd"
+
+[sub_resource type="Animation" id="Animation_pmhjo"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_kbprn"]
+resource_name = "slot_in"
+length = 0.25
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ipqrb"]
+_data = {
+&"RESET": SubResource("Animation_pmhjo"),
+&"slot_in": SubResource("Animation_kbprn")
+}
+
+[node name="Box" type="Node2D" unique_id=1842662004]
+y_sort_enabled = true
+script = ExtResource("1_6qeuk")
+component_resources = Array[ExtResource("2_phrsi")]([SubResource("Resource_84kud"), SubResource("Resource_xccy8"), SubResource("Resource_7wlqk"), SubResource("Resource_0ptv4")])
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1168785938]
+texture = ExtResource("2_84kud")
+centered = false
+offset = Vector2(0, -9)
+hframes = 5
+vframes = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=620335202]
+libraries/ = SubResource("AnimationLibrary_ipqrb")

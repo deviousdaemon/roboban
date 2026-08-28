@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://b5xoscm8aucos"]
+
+[ext_resource type="Script" uid="uid://dy6bamvx4ljom" path="res://scripts/entities/conveyor_belt.gd" id="1_g6q21"]
+[ext_resource type="Script" uid="uid://b6k13gc2m4e5s" path="res://addons/gecs/ecs/component.gd" id="2_dnktd"]
+[ext_resource type="Texture2D" uid="uid://3c2tdluij407" path="res://assets/images/conveyors.aseprite" id="2_j4bhp"]
+[ext_resource type="Script" uid="uid://b4rbj5gkyqjhp" path="res://scripts/components/c_grid_position.gd" id="3_o86ny"]
+[ext_resource type="Script" uid="uid://ss081cv1vdy0" path="res://scripts/components/c_trigger.gd" id="4_6xwya"]
+[ext_resource type="Script" uid="uid://bi1cv18e6ndx1" path="res://scripts/components/c_receiver.gd" id="5_o86ny"]
+[ext_resource type="Script" uid="uid://jw6bni3jla5s" path="res://scripts/components/c_conveyor.gd" id="6_6xwya"]
+
+[sub_resource type="Resource" id="Resource_pqd0y"]
+script = ExtResource("3_o86ny")
+metadata/_custom_type_script = "uid://b4rbj5gkyqjhp"
+
+[sub_resource type="Resource" id="Resource_5k0ak"]
+script = ExtResource("4_6xwya")
+metadata/_custom_type_script = "uid://ss081cv1vdy0"
+
+[sub_resource type="Resource" id="Resource_dnktd"]
+script = ExtResource("5_o86ny")
+metadata/_custom_type_script = "uid://bi1cv18e6ndx1"
+
+[sub_resource type="Resource" id="Resource_wu01b"]
+script = ExtResource("6_6xwya")
+metadata/_custom_type_script = "uid://jw6bni3jla5s"
+
+[sub_resource type="Animation" id="Animation_j4bhp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_0xhrg"]
+resource_name = "default"
+length = 0.666
+loop_mode = 1
+step = 0.1665
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame_coords:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.16666667, 0.33333334, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cl7g4"]
+_data = {
+&"RESET": SubResource("Animation_j4bhp"),
+&"default": SubResource("Animation_0xhrg")
+}
+
+[node name="ConveyorBelt" type="Node2D" unique_id=632227576]
+z_index = -1
+script = ExtResource("1_g6q21")
+component_resources = Array[ExtResource("2_dnktd")]([SubResource("Resource_pqd0y"), SubResource("Resource_5k0ak"), SubResource("Resource_dnktd"), SubResource("Resource_wu01b")])
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1293999511]
+texture = ExtResource("2_j4bhp")
+centered = false
+hframes = 4
+vframes = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2146685107]
+libraries/ = SubResource("AnimationLibrary_cl7g4")

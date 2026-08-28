@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://c0ehqfu0uu6nq"]
+
+[ext_resource type="Script" uid="uid://bdt8og7vtsco2" path="res://scripts/entities/drop_off_point.gd" id="1_ueva6"]
+[ext_resource type="Texture2D" uid="uid://cgecv6dsrq2c6" path="res://assets/images/drop_off_points.aseprite" id="2_uicdr"]
+
+[node name="DropOffPoint" type="Node2D" unique_id=150095524]
+y_sort_enabled = true
+script = ExtResource("1_ueva6")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1373502621]
+texture = ExtResource("2_uicdr")
+centered = false
+hframes = 3

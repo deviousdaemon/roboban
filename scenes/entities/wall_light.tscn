@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://fipdwn0p6h80"]
+
+[ext_resource type="Script" uid="uid://svelloylsdkp" path="res://scripts/entities/wall_light.gd" id="1_gcj53"]
+[ext_resource type="Texture2D" uid="uid://jdnntu2ah3n3" path="res://assets/images/wall_lights.aseprite" id="2_rjlti"]
+[ext_resource type="Script" uid="uid://b6k13gc2m4e5s" path="res://addons/gecs/ecs/component.gd" id="2_sqssm"]
+[ext_resource type="Script" uid="uid://ss081cv1vdy0" path="res://scripts/components/c_trigger.gd" id="3_7323n"]
+[ext_resource type="Script" uid="uid://bi1cv18e6ndx1" path="res://scripts/components/c_receiver.gd" id="4_71orb"]
+
+[sub_resource type="Resource" id="Resource_qepek"]
+script = ExtResource("3_7323n")
+metadata/_custom_type_script = "uid://ss081cv1vdy0"
+
+[sub_resource type="Resource" id="Resource_8phal"]
+script = ExtResource("4_71orb")
+metadata/_custom_type_script = "uid://bi1cv18e6ndx1"
+
+[node name="WallLight" type="Node2D" unique_id=6269656]
+script = ExtResource("1_gcj53")
+component_resources = Array[ExtResource("2_sqssm")]([SubResource("Resource_qepek"), SubResource("Resource_8phal")])
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=739277087]
+texture = ExtResource("2_rjlti")
+centered = false
+hframes = 5
+vframes = 2
