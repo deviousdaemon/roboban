@@ -13,7 +13,6 @@ var DIRECTIONS: Array[Vector2i] = [Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT,
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 func _ready() -> void:
-	super()
 	direction = direction
 	#animation_player.current_animation = "default"
 	pass

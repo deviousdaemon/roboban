@@ -9,10 +9,10 @@ extends RefCounted
 ## property sync.
 ##
 ## Creation Recipe Format:
-##   { "r": "res://game/components/c_damaged.gd", "tt": "E", "t": "uuid-123" }
+##   { "r": "res://game/components/c_damaged.gd", "tt": "E", "t": 4294967321 }
 ##
 ## Target types:
-##   "E" = Entity (resolved via entity_id_registry)
+##   "E" = Entity (int handle id, resolved via entity_id_registry)
 ##   "C" = Component (instantiated from script path)
 ##   "S" = Script (loaded as archetype reference)
 ##   "N" = Null (no target)
@@ -55,6 +55,11 @@ func serialize_relationship(relationship: Relationship) -> Dictionary:
 	}
 
 	var target = relationship.target
+	# Freed target: dangling relationships are inert and not synced. Checked
+	# FIRST: a freed object compares == null (would serialize as a null-target
+	# recipe) and `is` hard-errors on a freed operand.
+	if typeof(target) == TYPE_OBJECT and not is_instance_valid(target):
+		return {}
 	if target == null:
 		recipe["tt"] = "N"
 		recipe["t"] = ""
@@ -114,13 +119,20 @@ func _load_script_instance(script_path: String):
 
 ## Resolve a relationship target from its serialized type and reference.
 ## Returns null for "N" (null target), Entity for "E", Component instance for "C", Script for "S".
-func _resolve_target(target_type: String, target_ref: String):
+## target_ref is an int handle id for "E" targets, a script path String for "C"/"S".
+func _resolve_target(target_type: String, target_ref):
 	match target_type:
 		"N":
 			return null
 		"E":
 			# Entity not yet in world returns null - caller should queue for deferred resolution
-			if target_ref != "" and _ns and _ns._world and _ns._world.entity_id_registry:
+			if (
+				target_ref is int
+				and target_ref != 0
+				and _ns
+				and _ns._world
+				and _ns._world.entity_id_registry
+			):
 				return _ns._world.entity_id_registry.get(target_ref)
 			return null
 		"C":
@@ -182,7 +194,7 @@ func try_resolve_pending(entity: Entity) -> void:
 		return
 
 	# Check all pending sources to see if any are waiting for this entity as target
-	var resolved_sources: Array[String] = []
+	var resolved_sources: Array[int] = []
 
 	_applying_relationship_data = true
 	for source_id in _pending_relationships.keys():
@@ -199,7 +211,7 @@ func try_resolve_pending(entity: Entity) -> void:
 		var still_pending: Array = []
 
 		for recipe in pending_recipes:
-			if recipe.get("tt", "") == "E" and recipe.get("t", "") == entity.id:
+			if recipe.get("tt", "") == "E" and recipe.get("t", 0) == entity.id:
 				# This pending relationship was waiting for the newly added entity
 				var relationship = deserialize_relationship(recipe)
 				if relationship != null and is_instance_valid(source_entity):
@@ -268,7 +280,7 @@ func _broadcast_relationship_change(
 
 ## Handle incoming relationship add RPC.
 func handle_relationship_add(payload: Dictionary) -> void:
-	var entity_id = payload.get("entity_id", "")
+	var entity_id = payload.get("entity_id", 0)
 	var recipe = payload.get("recipe", {})
 	var session_id = payload.get("session_id", 0)
 
@@ -322,7 +334,7 @@ func handle_relationship_add(payload: Dictionary) -> void:
 
 ## Handle incoming relationship remove RPC.
 func handle_relationship_remove(payload: Dictionary) -> void:
-	var entity_id = payload.get("entity_id", "")
+	var entity_id = payload.get("entity_id", 0)
 	var recipe = payload.get("recipe", {})
 	var session_id = payload.get("session_id", 0)
 
@@ -362,7 +374,7 @@ func handle_relationship_remove(payload: Dictionary) -> void:
 	else:
 		# Fallback: target may be despawned, scan existing relationships by recipe fields
 		var relation_path = recipe.get("r", "")
-		var target_id = recipe.get("t", "")
+		var target_id = recipe.get("t", 0)
 		var found := false
 		for existing_rel in entity.relationships:
 			if existing_rel.relation == null:
@@ -372,12 +384,12 @@ func handle_relationship_remove(payload: Dictionary) -> void:
 				continue
 			# Match target by entity id if target type is Entity
 			if recipe.get("tt", "") == "E":
-				if existing_rel.target is Entity and existing_rel.target.id == target_id:
+				# Freed/null target checked first; `is` hard-errors on a freed operand
+				if existing_rel.target == null or not is_instance_valid(existing_rel.target):
 					entity.remove_relationship(existing_rel)
 					found = true
 					break
-				# Target entity already freed - match by null target with same relation
-				if existing_rel.target == null or not is_instance_valid(existing_rel.target):
+				if existing_rel.target is Entity and existing_rel.target.id == target_id:
 					entity.remove_relationship(existing_rel)
 					found = true
 					break
@@ -392,20 +404,22 @@ func handle_relationship_remove(payload: Dictionary) -> void:
 					if existing_rel.target == null or not is_instance_valid(existing_rel.target):
 						matches = true
 				elif target_type == "C":
-					# Component target: match by script path
-					if existing_rel.target is Component:
+					# Component target: match by script path.
+					# Freed/null target checked first; `is` hard-errors on a freed operand.
+					if existing_rel.target == null or not is_instance_valid(existing_rel.target):
+						matches = true
+					elif existing_rel.target is Component:
 						var target_script = existing_rel.target.get_script()
 						if target_script != null and target_script.resource_path == target_ref:
 							matches = true
-					elif existing_rel.target == null or not is_instance_valid(existing_rel.target):
-						matches = true
 				elif target_type == "S":
-					# Script target: match by script path
-					if existing_rel.target is Script:
+					# Script target: match by script path.
+					# Freed/null target checked first; `is` hard-errors on a freed operand.
+					if existing_rel.target == null or not is_instance_valid(existing_rel.target):
+						matches = true
+					elif existing_rel.target is Script:
 						if existing_rel.target.resource_path == target_ref:
 							matches = true
-					elif existing_rel.target == null or not is_instance_valid(existing_rel.target):
-						matches = true
 
 				if matches:
 					entity.remove_relationship(existing_rel)

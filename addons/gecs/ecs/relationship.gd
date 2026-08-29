@@ -96,6 +96,10 @@ var target_query: Dictionary = {}
 ## Flag to track if this relationship was created from a component query dictionary (private - used for validation)
 var _is_query_relationship: bool = false
 
+## Cached relation Script — set once at _init so matches() compares cached refs
+## instead of calling get_script() up to 3x per candidate on hot scan paths.
+var _relation_script: Script = null
+
 
 func _init(_relation = null, _target = null):
 	# Handle component queries (dictionaries) for relation
@@ -148,6 +152,7 @@ func _init(_relation = null, _target = null):
 
 	relation = _relation
 	target = _target
+	_relation_script = relation.get_script() if relation != null else null
 
 
 ## Checks if this relationship matches another relationship.
@@ -170,23 +175,31 @@ func matches(other: Relationship) -> bool:
 		# Check if other relation has component query (query relationships)
 		if not other.relation_query.is_empty():
 			# Other has component query, check if this relation matches that query
-			if relation.get_script() == other.relation.get_script():
+			if _relation_script == other._relation_script:
 				rel_match = ComponentQueryMatcher.matches_query(relation, other.relation_query)
 			else:
 				rel_match = false
 		# Check if this relation has component query (this is query relationship)
 		elif not relation_query.is_empty():
 			# This has component query, check if other relation matches this query
-			if relation.get_script() == other.relation.get_script():
+			if _relation_script == other._relation_script:
 				rel_match = ComponentQueryMatcher.matches_query(other.relation, relation_query)
 			else:
 				rel_match = false
 		else:
-			# Standard type matching by script type
-			rel_match = relation.get_script() == other.relation.get_script()
+			# Standard type matching by cached script ref
+			rel_match = _relation_script == other._relation_script
 
 	# Compare targets
-	if other.target == null or target == null:
+	if (
+		(typeof(target) == TYPE_OBJECT and not is_instance_valid(target))
+		or (typeof(other.target) == TYPE_OBJECT and not is_instance_valid(other.target))
+	):
+		# Freed targets are inert and match nothing. Checked FIRST: a freed
+		# object compares == null (the wildcard branch below would swallow it)
+		# and `is` hard-errors on a freed left operand.
+		target_match = false
+	elif other.target == null or target == null:
 		# If either target is null, consider it a match (wildcard)
 		target_match = true
 	else:
@@ -239,7 +252,12 @@ func matches(other: Relationship) -> bool:
 func valid() -> bool:
 	# make sure the target is valid or null
 	var target_valid = false
-	if target == null:
+	if typeof(target) == TYPE_OBJECT and not is_instance_valid(target):
+		# Freed target (e.g. Entity freed outside remove_entity): checked FIRST,
+		# since a freed object compares == null (the null branch would report it
+		# valid) and any `is` check hard-errors on a freed operand.
+		target_valid = false
+	elif target == null:
 		target_valid = true
 	elif target is Entity:
 		target_valid = is_instance_valid(target)
@@ -273,8 +291,10 @@ func _to_string() -> String:
 		# Standard relation - just the type
 		parts.append(relation.get_script().resource_path)
 
-	# Format target
-	if target == null:
+	# Format target (freed checked first: a freed object compares == null)
+	if typeof(target) == TYPE_OBJECT and not is_instance_valid(target):
+		parts.append("<freed>")
+	elif target == null:
 		parts.append("null")
 	elif target is Entity:
 		# Use instance_id for stability - entity ID may not be set yet

@@ -13,10 +13,10 @@
 [ext_resource type="PackedScene" uid="uid://dbbfbrc5t7gbr" path="res://scenes/entities/box.tscn" id="8_b121j"]
 [ext_resource type="Script" uid="uid://cr8lc0ti2llxh" path="res://scripts/observers/drop_off_observer.gd" id="9_8iemx"]
 [ext_resource type="Script" uid="uid://ow2tj27h6ejh" path="res://scripts/observers/win_state_observer.gd" id="10_64w2a"]
-[ext_resource type="Script" uid="uid://dvk5xy5hrgvou" path="res://scripts/observers/switch_observer.gd" id="10_fpun6"]
+[ext_resource type="Script" uid="uid://dvk5xy5hrgvou" path="res://scripts/observers/button_observer.gd" id="10_fpun6"]
 [ext_resource type="PackedScene" uid="uid://c0ehqfu0uu6nq" path="res://scenes/entities/drop_off_point.tscn" id="10_olg7q"]
 [ext_resource type="Script" uid="uid://dgd8in8kqsobh" path="res://scripts/observers/power_channel_observer.gd" id="11_pqd0y"]
-[ext_resource type="PackedScene" uid="uid://dh7ac3vx2qfno" path="res://scenes/entities/floor_switch.tscn" id="15_wc255"]
+[ext_resource type="PackedScene" uid="uid://dh7ac3vx2qfno" path="res://scenes/entities/floor_button.tscn" id="15_wc255"]
 [ext_resource type="Script" uid="uid://b6k13gc2m4e5s" path="res://addons/gecs/ecs/component.gd" id="16_h6wmr"]
 [ext_resource type="Script" uid="uid://b4rbj5gkyqjhp" path="res://scripts/components/c_grid_position.gd" id="17_pqd0y"]
 [ext_resource type="Script" uid="uid://ss081cv1vdy0" path="res://scripts/components/c_trigger.gd" id="18_5k0ak"]
@@ -25,6 +25,7 @@
 [ext_resource type="Script" uid="uid://bi1cv18e6ndx1" path="res://scripts/components/c_receiver.gd" id="21_xy2fk"]
 [ext_resource type="PackedScene" uid="uid://b5xoscm8aucos" path="res://scenes/entities/conveyor_belt.tscn" id="23_5k0ak"]
 [ext_resource type="Script" uid="uid://jw6bni3jla5s" path="res://scripts/components/c_conveyor.gd" id="25_3ies3"]
+[ext_resource type="PackedScene" uid="uid://3f2scfj0141f" path="res://scenes/entities/door.tscn" id="26_xy2fk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_u5sy4"]
 texture = ExtResource("3_b121j")
@@ -166,6 +167,19 @@ metadata/_custom_type_script = "uid://bi1cv18e6ndx1"
 script = ExtResource("25_3ies3")
 metadata/_custom_type_script = "uid://jw6bni3jla5s"
 
+[sub_resource type="Resource" id="Resource_htbgl"]
+script = ExtResource("17_pqd0y")
+metadata/_custom_type_script = "uid://b4rbj5gkyqjhp"
+
+[sub_resource type="Resource" id="Resource_de05j"]
+script = ExtResource("18_5k0ak")
+metadata/_custom_type_script = "uid://ss081cv1vdy0"
+
+[sub_resource type="Resource" id="Resource_xy2fk"]
+script = ExtResource("21_xy2fk")
+channel = 0
+metadata/_custom_type_script = "uid://bi1cv18e6ndx1"
+
 [node name="Level" type="Node" unique_id=1620150134]
 script = ExtResource("1_2r41h")
 
@@ -217,7 +231,7 @@ metadata/_custom_type_script = "uid://cndebdwrtuxmx"
 script = ExtResource("9_8iemx")
 metadata/_custom_type_script = "uid://cr8lc0ti2llxh"
 
-[node name="SwitchObserver" type="Node" parent="Systems" unique_id=663462293]
+[node name="ButtonObserver" type="Node" parent="Systems" unique_id=663462293]
 script = ExtResource("10_fpun6")
 metadata/_custom_type_script = "uid://dvk5xy5hrgvou"
 
@@ -252,7 +266,7 @@ z_index = -1
 position = Vector2(16, -48)
 type = 1
 
-[node name="FloorSwitch" parent="Entities" unique_id=1881643470 instance=ExtResource("15_wc255")]
+[node name="FloorButton" parent="Entities" unique_id=1881643470 instance=ExtResource("15_wc255")]
 position = Vector2(-48, -64)
 component_resources = Array[ExtResource("16_h6wmr")]([SubResource("Resource_ji0xr"), SubResource("Resource_oksib"), SubResource("Resource_cmcjb")])
 
@@ -263,6 +277,10 @@ component_resources = Array[ExtResource("16_h6wmr")]([SubResource("Resource_qepe
 [node name="ConveyorBelt" parent="Entities" unique_id=632227576 instance=ExtResource("23_5k0ak")]
 position = Vector2(-48, 0)
 component_resources = Array[ExtResource("16_h6wmr")]([SubResource("Resource_pqd0y"), SubResource("Resource_5k0ak"), SubResource("Resource_wu01b"), SubResource("Resource_b1a72")])
+
+[node name="Door" parent="Entities" unique_id=1085242221 instance=ExtResource("26_xy2fk")]
+position = Vector2(-64, -32)
+component_resources = Array[ExtResource("16_h6wmr")]([SubResource("Resource_htbgl"), SubResource("Resource_de05j"), SubResource("Resource_xy2fk")])
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=305317484]
 zoom = Vector2(3, 3)

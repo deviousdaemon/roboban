@@ -1,6 +1,11 @@
 @tool
-class_name FloorSwitch extends RB_Entity
+class_name FloorButton extends RB_Entity
 
+@export_enum("Gray", "Black", "Blue", "Orange", "Yellow", "Caution") var color: int = 0 :
+	set(v):
+		color = v
+		if not sprite_2d: return
+		sprite_2d.region_rect.position.x = 32 * v
 
 @onready var sprite_2d: Sprite2D = $Sprite2D
 

@@ -14,7 +14,6 @@ func _init() -> void:
 	component_added.connect(_on_component_added)
 
 func _ready() -> void:
-	super()
 	type = type
 	pass
 

@@ -20,6 +20,6 @@ func _process(delta: float) -> void:
 	ECS.process(delta)
 
 func _on_level_won() -> void:
-	await get_tree().create_timer(0.5).timeout
-	print("")
+	await get_tree().create_timer(Globals.TIME_TO_MOVE).timeout
+	print("Level Won!")
 	pass

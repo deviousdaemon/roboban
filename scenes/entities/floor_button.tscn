@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://dh7ac3vx2qfno"]
+
+[ext_resource type="Script" uid="uid://bs6opfdalnqv7" path="res://scripts/entities/floor_switch.gd" id="1_5xile"]
+[ext_resource type="Script" uid="uid://b6k13gc2m4e5s" path="res://addons/gecs/ecs/component.gd" id="2_oksib"]
+[ext_resource type="Script" uid="uid://b4rbj5gkyqjhp" path="res://scripts/components/c_grid_position.gd" id="3_hey5t"]
+[ext_resource type="Script" uid="uid://ss081cv1vdy0" path="res://scripts/components/c_trigger.gd" id="4_hey5t"]
+[ext_resource type="Script" uid="uid://dphafssh546sd" path="res://scripts/components/c_transmitter.gd" id="5_y8ml3"]
+[ext_resource type="Texture2D" uid="uid://dmrtjmd623oqd" path="res://assets/images/floor_buttons.aseprite" id="6_l088m"]
+
+[sub_resource type="Resource" id="Resource_ji0xr"]
+script = ExtResource("3_hey5t")
+metadata/_custom_type_script = "uid://b4rbj5gkyqjhp"
+
+[sub_resource type="Resource" id="Resource_oksib"]
+script = ExtResource("4_hey5t")
+metadata/_custom_type_script = "uid://ss081cv1vdy0"
+
+[sub_resource type="Resource" id="Resource_hey5t"]
+script = ExtResource("5_y8ml3")
+metadata/_custom_type_script = "uid://dphafssh546sd"
+
+[node name="FloorButton" type="Node2D" unique_id=1881643470]
+z_index = -1
+script = ExtResource("1_5xile")
+component_resources = Array[ExtResource("2_oksib")]([SubResource("Resource_ji0xr"), SubResource("Resource_oksib"), SubResource("Resource_hey5t")])
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2060707401]
+texture = ExtResource("6_l088m")
+centered = false
+hframes = 2
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 16)

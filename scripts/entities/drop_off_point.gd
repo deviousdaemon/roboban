@@ -10,7 +10,6 @@ class_name DropOffPoint extends RB_Entity
 		sprite_2d.frame_coords.x = int(v)
 
 func _ready() -> void:
-	super()
 	type = type
 	pass
 
