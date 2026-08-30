@@ -28,3 +28,9 @@ func update_entity(entity: Entity, from: Vector2i, to: Vector2i) -> void:
 func get_entities_at(position: Vector2i) -> Array[Entity]:
 	if not spatial_map.has(position): return []
 	return spatial_map[position].duplicate()
+
+func has_blocker_at(position: Vector2i) -> bool:
+	if not spatial_map.has(position): return false
+	for entity in spatial_map[position]:
+		if entity.has_component(C_Blocking): return true
+	return false

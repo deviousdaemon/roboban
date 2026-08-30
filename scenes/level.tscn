@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://chwd3tdgnygnl" path="res://scripts/systems/animation_system.gd" id="7_t1rx8"]
 [ext_resource type="PackedScene" uid="uid://dbbfbrc5t7gbr" path="res://scenes/entities/box.tscn" id="8_b121j"]
 [ext_resource type="Script" uid="uid://cr8lc0ti2llxh" path="res://scripts/observers/drop_off_observer.gd" id="9_8iemx"]
+[ext_resource type="Script" uid="uid://7sbl7bjkpf3v" path="res://scripts/observers/door_observer.gd" id="9_556r4"]
 [ext_resource type="Script" uid="uid://ow2tj27h6ejh" path="res://scripts/observers/win_state_observer.gd" id="10_64w2a"]
 [ext_resource type="Script" uid="uid://dvk5xy5hrgvou" path="res://scripts/observers/button_observer.gd" id="10_fpun6"]
 [ext_resource type="PackedScene" uid="uid://c0ehqfu0uu6nq" path="res://scenes/entities/drop_off_point.tscn" id="10_olg7q"]
@@ -26,6 +27,7 @@
 [ext_resource type="PackedScene" uid="uid://b5xoscm8aucos" path="res://scenes/entities/conveyor_belt.tscn" id="23_5k0ak"]
 [ext_resource type="Script" uid="uid://jw6bni3jla5s" path="res://scripts/components/c_conveyor.gd" id="25_3ies3"]
 [ext_resource type="PackedScene" uid="uid://3f2scfj0141f" path="res://scenes/entities/door.tscn" id="26_xy2fk"]
+[ext_resource type="Script" uid="uid://bi64rl52d2fw8" path="res://scripts/components/c_door.gd" id="27_cmcjb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_u5sy4"]
 texture = ExtResource("3_b121j")
@@ -180,6 +182,10 @@ script = ExtResource("21_xy2fk")
 channel = 0
 metadata/_custom_type_script = "uid://bi1cv18e6ndx1"
 
+[sub_resource type="Resource" id="Resource_f8c16"]
+script = ExtResource("27_cmcjb")
+metadata/_custom_type_script = "uid://bi64rl52d2fw8"
+
 [node name="Level" type="Node" unique_id=1620150134]
 script = ExtResource("1_2r41h")
 
@@ -226,6 +232,10 @@ metadata/_custom_type_script = "uid://ctdtd3q1c6hmx"
 [node name="ConveyorObserver" type="Node" parent="Systems" unique_id=713418925]
 script = ExtResource("6_wu01b")
 metadata/_custom_type_script = "uid://cndebdwrtuxmx"
+
+[node name="DoorObserver" type="Node" parent="Systems" unique_id=1077788778]
+script = ExtResource("9_556r4")
+metadata/_custom_type_script = "uid://7sbl7bjkpf3v"
 
 [node name="DropOffObserver" type="Node" parent="Systems" unique_id=2047211524]
 script = ExtResource("9_8iemx")
@@ -275,12 +285,13 @@ position = Vector2(-32, -80)
 component_resources = Array[ExtResource("16_h6wmr")]([SubResource("Resource_qepek"), SubResource("Resource_556r4")])
 
 [node name="ConveyorBelt" parent="Entities" unique_id=632227576 instance=ExtResource("23_5k0ak")]
-position = Vector2(-48, 0)
+position = Vector2(-48, -32)
+direction = 2
 component_resources = Array[ExtResource("16_h6wmr")]([SubResource("Resource_pqd0y"), SubResource("Resource_5k0ak"), SubResource("Resource_wu01b"), SubResource("Resource_b1a72")])
 
 [node name="Door" parent="Entities" unique_id=1085242221 instance=ExtResource("26_xy2fk")]
 position = Vector2(-64, -32)
-component_resources = Array[ExtResource("16_h6wmr")]([SubResource("Resource_htbgl"), SubResource("Resource_de05j"), SubResource("Resource_xy2fk")])
+component_resources = Array[ExtResource("16_h6wmr")]([SubResource("Resource_htbgl"), SubResource("Resource_de05j"), SubResource("Resource_xy2fk"), SubResource("Resource_f8c16")])
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=305317484]
 zoom = Vector2(3, 3)

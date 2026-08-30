@@ -15,7 +15,7 @@ func _on_world_ready() -> void:
 func sub_observers() -> Array[Array]:
 	return [
 		[q.with_all([C_Pushable, C_GridPosition]).with_none([C_ActionLock]).on_changed([&"position"]), _grid_position_changed],
-		[q.with_all([C_Trigger, C_Conveyor]).on_changed([&"active"]), _trigger_changed]
+		[q.with_all([C_Trigger, C_Conveyor]).on_changed([&"active"]), _trigger_changed],
 	]
 
 #func query() -> QueryBuilder:
@@ -59,3 +59,7 @@ func _trigger_changed(event: Variant, entity: Entity, payload: Variant = null) -
 					pass
 	
 	pass
+
+
+
+
