@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://ss081cv1vdy0" path="res://scripts/components/c_trigger.gd" id="4_hey5t"]
 [ext_resource type="Script" uid="uid://dphafssh546sd" path="res://scripts/components/c_transmitter.gd" id="5_y8ml3"]
 [ext_resource type="Texture2D" uid="uid://dmrtjmd623oqd" path="res://assets/images/floor_buttons.aseprite" id="6_l088m"]
+[ext_resource type="AudioStream" uid="uid://dinvllqbfj4aj" path="res://assets/sounds/button_activate.wav" id="7_vfv1a"]
+[ext_resource type="AudioStream" uid="uid://b6e45l20bpa32" path="res://assets/sounds/button_deactivate.wav" id="8_jhsr2"]
 
 [sub_resource type="Resource" id="Resource_ji0xr"]
 script = ExtResource("3_hey5t")
@@ -30,3 +32,11 @@ centered = false
 hframes = 2
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 16)
+
+[node name="AudioPlayerActivate" type="AudioStreamPlayer2D" parent="." unique_id=1051972372]
+stream = ExtResource("7_vfv1a")
+volume_db = -10.0
+
+[node name="AudioPlayerDeactivate" type="AudioStreamPlayer2D" parent="." unique_id=1972244588]
+stream = ExtResource("8_jhsr2")
+volume_db = -5.0

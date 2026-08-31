@@ -15,6 +15,7 @@ signal save_needed
 func _ready() -> void:
 	if is_part_of_edited_scene():
 		return
+	focus_entered.connect(release_focus)
 	
 	undo_redo = UndoRedo.new()
 	undo_redo.max_steps = 20

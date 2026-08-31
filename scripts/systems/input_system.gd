@@ -5,9 +5,9 @@ func query() -> QueryBuilder:
 
 func process(entities: Array[Entity], _components: Array, delta: float) -> void:
 	var movement_input: Vector2i
-	if Input.is_action_just_pressed("move_left") or Input.is_action_just_pressed("move_right"):
+	if Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right"):
 		movement_input.x = -1 if Input.is_action_pressed("move_left") else 1
-	elif Input.is_action_just_pressed("move_up") or Input.is_action_just_pressed("move_down"):
+	elif Input.is_action_pressed("move_up") or Input.is_action_pressed("move_down"):
 		movement_input.y = -1 if Input.is_action_pressed("move_up") else 1
 	
 	
