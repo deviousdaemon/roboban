@@ -7,6 +7,9 @@
 [ext_resource type="Script" uid="uid://bnhw3nj3ouvbc" path="res://scripts/components/c_pushable.gd" id="4_pmhjo"]
 [ext_resource type="Script" uid="uid://cfkdxuv6q4ixf" path="res://scripts/components/c_blocking.gd" id="5_kbprn"]
 [ext_resource type="Script" uid="uid://dqrdw7fkfybhd" path="res://scripts/components/c_box_type.gd" id="6_ipqrb"]
+[ext_resource type="AudioStream" uid="uid://cvd1rxxgxn8y2" path="res://assets/sounds/box_push_cardboard.wav" id="8_p1tm0"]
+[ext_resource type="AudioStream" uid="uid://dbsayvehme1bf" path="res://assets/sounds/box_push_metal.wav" id="9_kbprn"]
+[ext_resource type="AudioStream" uid="uid://c3uniaei2veq5" path="res://assets/sounds/box_push_plastic.wav" id="10_ipqrb"]
 
 [sub_resource type="Resource" id="Resource_84kud"]
 script = ExtResource("3_p1tm0")
@@ -62,8 +65,23 @@ _data = {
 &"slot_in": SubResource("Animation_kbprn")
 }
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_yq6m1"]
-size = Vector2(10, 10)
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_5d2xg"]
+playback_mode = 1
+random_pitch = 1.122462
+streams_count = 1
+stream_0/stream = ExtResource("8_p1tm0")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_a222f"]
+playback_mode = 1
+random_pitch = 1.122462
+streams_count = 1
+stream_0/stream = ExtResource("9_kbprn")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_ssf4s"]
+playback_mode = 1
+random_pitch = 1.122462
+streams_count = 1
+stream_0/stream = ExtResource("10_ipqrb")
 
 [node name="Box" type="Node2D" unique_id=1842662004]
 y_sort_enabled = true
@@ -82,9 +100,13 @@ frame = 10
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=620335202]
 libraries/ = SubResource("AnimationLibrary_ipqrb")
 
-[node name="Area2D" type="Area2D" parent="." unique_id=808802032]
+[node name="AudioPlayer0" type="AudioStreamPlayer2D" parent="." unique_id=1412062098]
+stream = SubResource("AudioStreamRandomizer_5d2xg")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=624571838]
-position = Vector2(8, 9)
-shape = SubResource("RectangleShape2D_yq6m1")
-disabled = true
+[node name="AudioPlayer1" type="AudioStreamPlayer2D" parent="." unique_id=1873291726]
+stream = SubResource("AudioStreamRandomizer_a222f")
+volume_db = -2.0
+
+[node name="AudioPlayer2" type="AudioStreamPlayer2D" parent="." unique_id=432439681]
+stream = SubResource("AudioStreamRandomizer_ssf4s")
+volume_db = -3.0

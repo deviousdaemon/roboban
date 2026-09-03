@@ -10,6 +10,8 @@ const DOORS_HORIZONTAL_TEXTURE: Texture2D = preload("uid://blj6h1xq2hmug")
 @onready var sprite_2d_top: Sprite2D = $Sprite2DTop
 @onready var sprite_2d_middle: Sprite2D = $Sprite2DMiddle
 @onready var sprite_2d_bottom: Sprite2D = $Sprite2DBottom
+@onready var audio_player_open: AudioStreamPlayer2D = $AudioPlayerOpen
+@onready var audio_player_close: AudioStreamPlayer2D = $AudioPlayerClose
 
 
 var tween: Tween = null
@@ -81,6 +83,7 @@ func open() -> void:
 	tween.tween_property(sprite_2d_top, "frame_coords:" + "x" if is_vertical else "y", 12, Globals.TIME_TO_MOVE / 2)
 	tween.tween_property(sprite_2d_middle, "frame_coords:" + "x" if is_vertical else "y", 12, Globals.TIME_TO_MOVE / 2)
 	tween.tween_property(sprite_2d_bottom, "frame_coords:" + "x" if is_vertical else "y", 12, Globals.TIME_TO_MOVE / 2)
+	audio_player_open.play()
 	if has_component(C_Blocking):
 		remove_component(C_Blocking)
 		#tween.finished.connect(remove_component.bind(C_Blocking))
@@ -93,6 +96,7 @@ func close() -> void:
 	tween.tween_property(sprite_2d_top, "frame_coords:" + "x" if is_vertical else "y", 0, Globals.TIME_TO_MOVE / 2)
 	tween.tween_property(sprite_2d_middle, "frame_coords:" + "x" if is_vertical else "y", 0, Globals.TIME_TO_MOVE / 2)
 	tween.tween_property(sprite_2d_bottom, "frame_coords:" + "x" if is_vertical else "y", 0, Globals.TIME_TO_MOVE / 2)
+	audio_player_close.play()
 	if not has_component(C_Blocking):
 		add_component(C_Blocking.new())
 		#tween.finished.connect(add_component.bind(C_Blocking.new()))
@@ -100,8 +104,6 @@ func close() -> void:
 	pass
 
 func _update_sprite() -> void:
-	sprite_2d_top
-	sprite_2d_bottom
 	
 	sprite_2d_top.texture = DOORS_VERTICAL_TEXTURE if is_vertical else DOORS_HORIZONTAL_TEXTURE
 	sprite_2d_middle.texture = DOORS_VERTICAL_TEXTURE if is_vertical else DOORS_HORIZONTAL_TEXTURE

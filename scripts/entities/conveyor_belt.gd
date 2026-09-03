@@ -11,6 +11,7 @@ var DIRECTIONS: Array[Vector2i] = [Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT,
 
 @onready var sprite_2d: Sprite2D = $Sprite2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var audio_player: AudioStreamPlayer2D = $AudioPlayer
 
 func _ready() -> void:
 	direction = direction
@@ -26,8 +27,10 @@ func on_component_property_changed(_entity: Entity, component: Resource, _proper
 	if component is C_Trigger:
 		if component.active and not animation_player.is_playing():
 			animation_player.play("default")
+			audio_player.play()
 		elif not component.active and animation_player.is_playing():
 			animation_player.pause()
+			audio_player.stop()
 			#animation_player.stop(true)
 	pass
 

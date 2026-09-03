@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://ce08dloiww38j"
+path="res://.godot/imported/immovable_box.aseprite-9828a514b625c7b40cdfb161727a1eb6.res"
+
+[deps]
+
+source_file="res://assets/images/immovable_box.aseprite"
+dest_files=["res://.godot/imported/immovable_box.aseprite-9828a514b625c7b40cdfb161727a1eb6.res"]
+
+[params]
+

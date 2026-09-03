@@ -17,7 +17,7 @@ func _on_world_ready() -> void:
 func query() -> QueryBuilder:
 	return q.with_all([C_Blocking, C_DropOffType]).on_added().with_none([C_ActionLock])
 
-func each(event: Variant, entity: Entity, payload: Variant = null) -> void:
+func each(event: Variant, _entity: Entity, _payload: Variant = null) -> void:
 	match event:
 		Observer.Event.ADDED:
 			if check_win_state():
